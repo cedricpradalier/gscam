@@ -73,6 +73,7 @@ namespace gscam {
     nh_private_.param("sync_sink", sync_sink_, true);
     nh_private_.param("preroll", preroll_, false);
     nh_private_.param("use_gst_timestamps", use_gst_timestamps_, false);
+    nh_private_.param("delay", delay_, 0.0);
 
     nh_private_.param("reopen_on_eof", reopen_on_eof_, false);
 
@@ -191,6 +192,8 @@ namespace gscam {
     gst_object_unref(clock);
     time_offset_ = now.toSec() - GST_TIME_AS_USECONDS(ct)/1e6;
     ROS_INFO("Time offset: %.3f",time_offset_);
+
+    ros::Duration(delay_).sleep();
 
     gst_element_set_state(pipeline_, GST_STATE_PAUSED);
 
